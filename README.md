@@ -1,6 +1,6 @@
 # RetroDECK-cooker
 
-<img src="https://github.com/XargonWan/RetroDECK-cooker/blob/main/cooker.jpg?raw=true" alt="RetroDECK-cooker logo" width="700"/>
+<img src="https://github.com/XargonWan/RetroDECK-cooker/blob/main/cooker.png?raw=true" alt="RetroDECK-cooker logo" width="700"/>
 
 Cooker images repository for RetroDECK
 
