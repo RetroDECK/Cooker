@@ -10,8 +10,8 @@ RetroDECK Cooker are the bleeding edge development builds of [RetroDECK](https:/
 These builds can make you loose all data including `ROMS`, `BIOS` and `Scraped Data` etc..
 We recomend that you don't run Cooker builds on your main gaming machine and wait for Stable Releases. 
 
-## 🛑 Warning! Excpect bugs and issues! 🛑
-These builds contain several bugs, are volitile and unstable. 
+## 🛑 Warning! Expect bugs and issues! 🛑
+These builds can contain several bug and should be seen as unstable. 
 
 # Can I help you with testing? 
 Yes, do the backups above and tell in Discord channel `i-want-to-help` that you are instrested in testing out Cooker builds.
