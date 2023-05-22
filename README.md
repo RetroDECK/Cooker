@@ -4,17 +4,18 @@
 
 
 # What is RetroDECK Cooker?
-RetroDECK Cooker are the bleeding edge development builds of [RetroDECK](https://github.com/XargonWan/RetroDECK) and are only for development and testing purposes.
+RetroDECK Cooker are the bleeding edge development builds of [RetroDECK](https://github.com/XargonWan/RetroDECK). These builds are only for development and testing purposes.
 
-## Warning! Backup before testing!
-These builds can make you loose all data including ROMS & BIOS & Scraped Data etc..
+## 🛑 Warning! Backup before testing! 🛑
+These builds can make you loose all data including `ROMS`, `BIOS` and `Scraped Data` etc..
 We recomend that you don't run Cooker builds on your main gaming machine and wait for Stable Releases. 
 
-## Warning! Excpect bugs and issues!
+## 🛑 Warning! Excpect bugs and issues! 🛑
 These builds contain several bugs, are volitile and unstable. 
 
 # Can I help you with testing? 
-Yes, do the backups above and tell PM any mod on Discord that you are instrested in testing out Cooker builds. 
+Yes, do the backups above and tell in Discord channel `i-want-to-help` that you are instrested in testing out Cooker builds.
+You will get some instructions from one of the mods and be promoted to a `BetaTester` role. 
 
 ## Can I contribute to the project in another way?
 Yes! Everybody is welcome to contribute in any way possible if it is personal time or funds, just check out our [Discord](https://discord.gg/Dz3szYsP8g)!
