@@ -14,7 +14,7 @@ We recomend that you don't run Cooker builds on your main gaming machine and wai
 These builds can contain several bug and should be seen as unstable. 
 
 # Can I help you with testing? 
-Yes, do the backups above and tell in Discord channel `i-want-to-help` that you are instrested in testing out Cooker builds.
+Yes, do the backups above and tell in Discord channel `i-want-to-help` that you are interested in testing out Cooker builds.
 You will get some instructions from one of the mods and be promoted to a `BetaTester` role. 
 
 ## Can I contribute to the project in another way?
