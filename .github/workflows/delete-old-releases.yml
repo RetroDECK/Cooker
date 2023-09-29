@@ -3,6 +3,7 @@ name: Delete Old Releases
 on:
   schedule:
     - cron: '0 0 * * 0' # Runs every Sunday at midnight
+  workflow_dispatch:
 
 jobs:
   delete-old-releases:
