@@ -1,0 +1,45 @@
+name: Delete Old Releases
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Runs every Sunday at midnight
+
+jobs:
+  delete-old-releases:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+
+      - name: List releases
+        id: list-releases
+        run: |
+          echo "::set-output name=releases::$(gh release list --json name,created_at --limit 100 --format json)"
+
+      - name: Delete old releases
+        run: |
+          releases=${{ steps.list-releases.outputs.releases }}
+          current_time=$(date -u +%s)
+          two_weeks_ago=$(date -u -d "2 weeks ago" +%s)
+
+          for release in $(echo $releases | jq -r '.[] | @base64'); do
+            _jq() {
+              echo ${release} | base64 --decode | jq -r ${1}
+            }
+
+            release_created_at=$(_jq '.created_at')
+            release_timestamp=$(date -u -d "$release_created_at" +%s)
+
+            if [[ $release_timestamp -lt $two_weeks_ago ]]; then
+              release_name=$(_jq '.name')
+              echo "Deleting release: $release_name"
+              gh release delete "$release_name" -y
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
