@@ -3,6 +3,7 @@ name: Clean Old Releases
 on:
   schedule:
     - cron: '0 0 * * *' # Run daily at midnight
+  workflow_dispatch:
 
 jobs:
   clean-releases:
