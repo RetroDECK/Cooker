@@ -23,12 +23,18 @@ jobs:
         # Define the threshold date (1 month ago)
         THRESHOLD_DATE=$(date -d "1 month ago" +%Y-%m-%dT%H:%M:%SZ)
         
-        # Get releases older than 1 month
-        OLD_RELEASES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | jq --arg threshold "$THRESHOLD_DATE" '.[] | select(.published_at < $threshold) | .id')
+        # Get all releases (handle pagination)
+        ALL_RELEASES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases?per_page=100&page=1")
+        PAGE_COUNT=$(echo "$ALL_RELEASES" | jq '. | length')
         
-        # Delete old releases
-        for release_id in $OLD_RELEASES; do
-          curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_id"
+        # Loop through pages and get releases older than 1 month
+        for ((i=0; i<$PAGE_COUNT; i++)); do
+          OLD_RELEASES=$(echo "$ALL_RELEASES" | jq --arg threshold "$THRESHOLD_DATE" ".[$i] | select(.published_at < \$threshold) | .id")
+        
+          # Delete old releases
+          for release_id in $OLD_RELEASES; do
+            curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_id"
+          done
         done
 
       env:
