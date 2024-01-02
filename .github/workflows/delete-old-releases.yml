@@ -1,46 +1,33 @@
-name: Delete Old Releases
+name: Clean Old Releases
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Runs every Sunday at midnight
-  workflow_dispatch:
+    - cron: '0 0 * * *' # Run daily at midnight
 
 jobs:
-  delete-old-releases:
+  clean-releases:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Set up Git
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
+    - name: Set up Git
+      run: |
+        git config user.email "${{ secrets.GIT_MAIL }}"
+        git config user.name "${{ secrets.GIT_USERNAME }}"
 
-      - name: List releases
-        id: list-releases
-        run: |
-          echo "::set-output name=releases::$(gh release list --json name,created_at --limit 100 --format json)"
+    - name: Clean Old Releases
+      run: |
+        # Define the threshold date (1 month ago)
+        THRESHOLD_DATE=$(date -d "1 month ago" +%Y-%m-%dT%H:%M:%SZ)
 
-      - name: Delete old releases
-        run: |
-          releases=${{ steps.list-releases.outputs.releases }}
-          current_time=$(date -u +%s)
-          two_weeks_ago=$(date -u -d "2 weeks ago" +%s)
+        # Get releases older than 1 month
+        OLD_RELEASES=$(jq --arg threshold "$THRESHOLD_DATE" '. | select(.published_at < $threshold) | .id' <<< "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/$GITHUB_REPOSITORY/releases)")
 
-          for release in $(echo $releases | jq -r '.[] | @base64'); do
-            _jq() {
-              echo ${release} | base64 --decode | jq -r ${1}
-            }
-
-            release_created_at=$(_jq '.created_at')
-            release_timestamp=$(date -u -d "$release_created_at" +%s)
-
-            if [[ $release_timestamp -lt $two_weeks_ago ]]; then
-              release_name=$(_jq '.name')
-              echo "Deleting release: $release_name"
-              gh release delete "$release_name" -y
-            fi
-          done
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Delete old releases
+        for release_id in $OLD_RELEASES; do
+          curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_id"
+        done
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
