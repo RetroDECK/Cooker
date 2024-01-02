@@ -27,8 +27,19 @@ jobs:
         ALL_RELEASES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases?per_page=100&page=1")
         PAGE_COUNT=$(echo "$ALL_RELEASES" | jq '. | length')
         
-        # Loop through pages and get releases older than 1 month
+        # Get the latest release ID
+        LATEST_RELEASE=$(echo "$ALL_RELEASES" | jq -r '.[0].id')
+        
+        # Loop through pages and get releases older than 1 month (excluding the latest)
         for ((i=0; i<$PAGE_COUNT; i++)); do
+          RELEASE_ID=$(echo "$ALL_RELEASES" | jq -r ".[$i].id")
+        
+          # Skip the latest release
+          if [ "$RELEASE_ID" == "$LATEST_RELEASE" ]; then
+            continue
+          fi
+        
+          # Check if the release is older than 1 month
           OLD_RELEASES=$(echo "$ALL_RELEASES" | jq --arg threshold "$THRESHOLD_DATE" ".[$i] | select(.published_at < \$threshold) | .id")
         
           # Delete old releases
