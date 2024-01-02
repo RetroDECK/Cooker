@@ -22,13 +22,14 @@ jobs:
       run: |
         # Define the threshold date (1 month ago)
         THRESHOLD_DATE=$(date -d "1 month ago" +%Y-%m-%dT%H:%M:%SZ)
-
+        
         # Get releases older than 1 month
-        OLD_RELEASES=$(jq --arg threshold "$THRESHOLD_DATE" '. | select(.published_at < $threshold) | .id' <<< "$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/$GITHUB_REPOSITORY/releases)")
-
+        OLD_RELEASES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases" | jq --arg threshold "$THRESHOLD_DATE" '.[] | select(.published_at < $threshold) | .id')
+        
         # Delete old releases
         for release_id in $OLD_RELEASES; do
-          curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_id"
+          curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$release_id"
         done
+
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
