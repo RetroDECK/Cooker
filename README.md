@@ -1,7 +1,6 @@
 # RetroDECK Cooker Repository
 
-<img src="https://github.com/RetroDECK/RetroDECK-cooker/blob/main/cooker.png?raw=true" alt="RetroDECK-cooker logo" width="700"/>
-
+<img src="https://github.com/RetroDECK/cooker/blob/main/cooker.png?raw=true" alt="RetroDECK-cooker logo" width="700"/>
 
 ## What is RetroDECK Cooker?
 
