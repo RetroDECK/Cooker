@@ -22,6 +22,9 @@ jobs:
       run: |
         # Define the threshold date (1 month ago)
         THRESHOLD_DATE=$(date -d "1 month ago" +%Y-%m-%dT%H:%M:%SZ)
+
+        # Define the list of tags to be excluded
+        EXCLUDE_TAGS=("cooker-0.9.0b-ShoujoMonster")
         
         # Get all releases (handle pagination)
         ALL_RELEASES=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases?per_page=100&page=1")
@@ -36,6 +39,11 @@ jobs:
         
           # Skip the latest release
           if [ "$RELEASE_ID" == "$LATEST_RELEASE" ]; then
+            continue
+          fi
+
+          # Skip releases with tags in the exclude list
+          if [[ " ${EXCLUDE_TAGS[@]} " =~ " ${TAG_NAME} " ]]; then
             continue
           fi
         
