@@ -1,4 +1,4 @@
-# RetroDECK Cooker Repository
+# RetroDECK Cooker Releases - Repository
 
 <img src="https://github.com/RetroDECK/cooker/blob/main/cooker.png?raw=true" alt="RetroDECK-cooker logo" width="700"/>
 
